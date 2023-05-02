@@ -1,0 +1,9 @@
+.add-todo-container .add-input {
+  width: 297px;
+  height: 40px;
+  padding: 12px 15px;
+  background-color: #152431;
+  border: 1px solid rgba(143, 168, 193, 0.5);
+  border-radius: 4px;
+  color: white;
+}

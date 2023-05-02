@@ -1,0 +1,16 @@
+.add-todo-container .add-button {
+  padding: 12px 14px;
+  width: 95px;
+  height: 40px;
+  background: #0c5488;
+  border-radius: 4px;
+  color: #8fa8c1;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  cursor: pointer;
+}
+
+.add-todo-container .add-button:hover {
+  color: #eeeeee;
+}

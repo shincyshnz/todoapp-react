@@ -1,0 +1,28 @@
+.todo-container {
+  margin: 66px auto;
+  padding: 10px;
+  background-color: #152431;
+  color: #8fa8c1;
+
+  width: 500px;
+  height: 612px;
+
+  border-radius: 6px;
+}
+
+.todo-container h1 {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 42px;
+  text-align: center;
+  margin: 27px;
+}
+
+.add-todo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
