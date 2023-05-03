@@ -6,7 +6,9 @@ import { TodoList } from "./TodoList/TodoList";
 
 export const TodoApp = () => {
   const [inputValue, setInputValue] = useState("");
+
   const [editInputValue, setEditInputValue] = useState({});
+
   const [errorInputField, setErrorInputField] = useState({
     addInput: {
       error: false,
@@ -17,6 +19,7 @@ export const TodoApp = () => {
       errorMessage: "",
     },
   });
+
   const [todos, setTodos] = useState(() => {
     const storedTodos = JSON.parse(localStorage.getItem("Todo List"));
     return storedTodos || [];
@@ -66,18 +69,10 @@ export const TodoApp = () => {
   // Handling Button click Event for adding new todo
   const onClickEventAdd = (event) => {
     event.preventDefault();
+
     const tempTodos = [...todos];
-
-    // Add data to local storage if edit input Value is valid
-    if (Object.values(editInputValue).length > 0) {
-      // store todos previous values into tempTodos and push new values to tempTodos
-      let index = tempTodos.indexOf(editInputValue);
-      tempTodos[index].description = inputValue;
-      setInputValue("");
-    }
-
     // Add data to local storage if input Value is valid
-    if (!errorInputField.error && inputValue) {
+    if (inputValue && !errorInputField.error) {
       // store todos previous values into tempTodos and push new values to tempTodos
       tempTodos.push({
         id: randomIDGenerator(),
@@ -124,10 +119,18 @@ export const TodoApp = () => {
   // Handling Button click Event for cancel Edit
   const onClickEventSave = (event) => {
     event.preventDefault();
+    const tempTodos = [...todos];
 
+    // Add data to local storage if edit input Value is valid
+    if (Object.values(editInputValue).length > 0) {
+      // store todos previous values into tempTodos and push new values to tempTodos
+      let index = tempTodos.indexOf(editInputValue);
+      tempTodos[index].description = inputValue;
+    }
+    setTodos(tempTodos);
     setEditInputValue({});
   };
-
+  console.log(inputValue);
   return (
     <div className="todo-container">
       <div className="todo-inner-container">
@@ -139,6 +142,7 @@ export const TodoApp = () => {
             placeholderText={"New Todo"}
             onChangeEvent={onChangeEvent}
             onBlurEvent={onBlurEvent}
+            inputValue={inputValue["add-input"]}
           />
 
           <Buttons
@@ -149,7 +153,7 @@ export const TodoApp = () => {
           />
         </div>
         <div className="error-container">
-          {setInputValue && errorInputField.error && (
+          {inputValue && errorInputField.error && (
             <label className="error-input">
               {errorInputField.errorMessage}
             </label>
@@ -188,11 +192,12 @@ export const TodoApp = () => {
               placeholderText={editInputValue.description}
               onChangeEvent={onChangeEvent}
               onBlurEvent={onBlurEvent}
+              inputValue={inputValue["edit-input"]}
             />
 
             <Buttons
               classNameText={"add-button"}
-              onClickEvent={onClickEventAdd}
+              onClickEvent={onClickEventSave}
               buttonText={"SAVE"}
               todoid={editInputValue.id}
             />
