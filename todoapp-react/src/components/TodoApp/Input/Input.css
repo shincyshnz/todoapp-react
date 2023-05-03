@@ -7,3 +7,19 @@
   border-radius: 4px;
   color: white;
 }
+
+.add-todo-container .add-input:focus,
+.add-todo-container .edit-input:focus {
+  border: solid 1px white;
+  outline: none;
+}
+
+.add-todo-container .edit-input {
+  width: 234px;
+  height: 40px;
+  padding: 12px 15px;
+  background-color: #152431;
+  border: 1px solid rgba(143, 168, 193, 0.5);
+  border-radius: 4px;
+  color: white;
+}

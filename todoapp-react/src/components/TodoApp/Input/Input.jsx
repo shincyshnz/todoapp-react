@@ -1,17 +1,12 @@
 import React from "react";
 import "./Input.css";
 
-export const Input = ({
-  type,
-  classNameText,
-  placeholderText,
-  onChangeEvent,
-}) => {
+export const Input = ({ type, className, placeholderText, onChangeEvent }) => {
   return (
-    <div>
+    <div className="input-container">
       <input
         type={type}
-        className={classNameText}
+        className={className}
         placeholder={placeholderText}
         onChange={onChangeEvent}
       />
