@@ -38,7 +38,6 @@ export const TodoApp = () => {
     };
 
     // Error handling for add todo
-
     if (value === "" || value.length <= 2) {
       tempErrorObj.error = true;
       tempErrorObj.errorMessage =
@@ -48,7 +47,10 @@ export const TodoApp = () => {
       tempErrorObj.errorMessage = "";
     }
 
-    setErrorInputField(tempErrorObj);
+    setErrorInputField((prev) => ({
+      ...prev,
+      [name]: tempErrorObj,
+    }));
   };
 
   // Handling onChange Event for input box
@@ -72,7 +74,7 @@ export const TodoApp = () => {
 
     const tempTodos = [...todos];
     // Add data to local storage if input Value is valid
-    if (inputValue && !errorInputField.error) {
+    if (!errorInputField.addInput.error) {
       // store todos previous values into tempTodos and push new values to tempTodos
       tempTodos.push({
         id: randomIDGenerator(),
@@ -107,6 +109,7 @@ export const TodoApp = () => {
     });
 
     setEditInputValue(found);
+    setInputValue(found.description);
   };
 
   // Handling Button click Event for cancel Edit
@@ -130,7 +133,7 @@ export const TodoApp = () => {
     setTodos(tempTodos);
     setEditInputValue({});
   };
-  console.log(inputValue);
+
   return (
     <div className="todo-container">
       <div className="todo-inner-container">
@@ -139,10 +142,11 @@ export const TodoApp = () => {
           <Input
             type={"text"}
             className={"add-input"}
+            name={"addInput"}
             placeholderText={"New Todo"}
             onChangeEvent={onChangeEvent}
             onBlurEvent={onBlurEvent}
-            inputValue={inputValue["add-input"]}
+            inputValue={inputValue}
           />
 
           <Buttons
@@ -153,9 +157,9 @@ export const TodoApp = () => {
           />
         </div>
         <div className="error-container">
-          {inputValue && errorInputField.error && (
+          {errorInputField.addInput.error && (
             <label className="error-input">
-              {errorInputField.errorMessage}
+              {errorInputField.addInput.errorMessage}
             </label>
           )}
         </div>
@@ -189,10 +193,11 @@ export const TodoApp = () => {
             <Input
               type={"text"}
               className={"edit-input"}
+              name={"editInput"}
               placeholderText={editInputValue.description}
               onChangeEvent={onChangeEvent}
               onBlurEvent={onBlurEvent}
-              inputValue={inputValue["edit-input"]}
+              inputValue={inputValue}
             />
 
             <Buttons
@@ -210,9 +215,9 @@ export const TodoApp = () => {
           </div>
         )}
         <div className="error-container">
-          {setEditInputValue && errorInputField.error && (
+          {errorInputField.editInput.error && (
             <label className="error-input">
-              {errorInputField.errorMessage}
+              {errorInputField.editInput.errorMessage}
             </label>
           )}
         </div>
