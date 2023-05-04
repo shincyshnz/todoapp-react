@@ -3,11 +3,15 @@ import "./TodoApp.css";
 import { Buttons } from "./Buttons/Buttons";
 import { Input } from "./Input/Input";
 import { TodoList } from "./TodoList/TodoList";
+import { v4 as uuid } from "uuid";
 
 export const TodoApp = () => {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState({
+    addInput: "",
+    editInput: "",
+  });
 
-  const [editInputValue, setEditInputValue] = useState({});
+  const [editInputObj, setEditInputObj] = useState({});
 
   const [errorInputField, setErrorInputField] = useState({
     addInput: {
@@ -29,43 +33,11 @@ export const TodoApp = () => {
     localStorage.setItem("Todo List", JSON.stringify(todos));
   }, [todos]);
 
-  // Handling onBlur Event for input box
-  const onBlurEvent = (event) => {
-    const { name, value } = event.target;
-    let tempErrorObj = {
-      error: false,
-      errorMessage: "",
-    };
-
-    // Error handling for add todo
-    if (value === "" || value.length <= 2) {
-      tempErrorObj.error = true;
-      tempErrorObj.errorMessage =
-        "Please enter any todo with more than 3 characters";
-    } else {
-      tempErrorObj.error = false;
-      tempErrorObj.errorMessage = "";
-    }
-
-    setErrorInputField((prev) => ({
-      ...prev,
-      [name]: tempErrorObj,
-    }));
-  };
-
-  // Handling onChange Event for input box
-  const onChangeEvent = (event) => {
-    setInputValue(event.target.value);
-    onBlurEvent(event);
-  };
-
   // Random ID generator for todos item
   const randomIDGenerator = () => {
-    const min = 0;
-    const max = 1000;
-    let id = Math.floor(Math.random() * (max - min) + min);
-
-    return `todo${id}`;
+    const unique_id = uuid();
+    const id = unique_id.slice(0, 8);
+    return id;
   };
 
   // Handling Button click Event for adding new todo
@@ -78,10 +50,14 @@ export const TodoApp = () => {
       // store todos previous values into tempTodos and push new values to tempTodos
       tempTodos.push({
         id: randomIDGenerator(),
-        description: inputValue,
+        description: inputValue.addInput,
         isCompleted: false,
       });
       setTodos(tempTodos);
+      setInputValue((prev) => ({
+        ...prev,
+        addInput: "",
+      }));
     }
 
     return;
@@ -108,15 +84,19 @@ export const TodoApp = () => {
       return todo.id === todoId;
     });
 
-    setEditInputValue(found);
-    setInputValue(found.description);
+    setEditInputObj(found);
+    // setInputValue(found.description);
+    setInputValue((prev) => ({
+      ...prev,
+      editInput: found.description,
+    }));
   };
 
   // Handling Button click Event for cancel Edit
   const onClickEventCancel = (event) => {
     event.preventDefault();
 
-    setEditInputValue({});
+    setEditInputObj({});
   };
 
   // Handling Button click Event for cancel Edit
@@ -125,13 +105,13 @@ export const TodoApp = () => {
     const tempTodos = [...todos];
 
     // Add data to local storage if edit input Value is valid
-    if (Object.values(editInputValue).length > 0) {
+    if (Object.values(editInputObj).length > 0) {
       // store todos previous values into tempTodos and push new values to tempTodos
-      let index = tempTodos.indexOf(editInputValue);
-      tempTodos[index].description = inputValue;
+      let index = tempTodos.indexOf(editInputObj);
+      tempTodos[index].description = inputValue.editInput;
     }
     setTodos(tempTodos);
-    setEditInputValue({});
+    setEditInputObj({});
   };
 
   return (
@@ -144,9 +124,9 @@ export const TodoApp = () => {
             className={"add-input"}
             name={"addInput"}
             placeholderText={"New Todo"}
-            onChangeEvent={onChangeEvent}
-            onBlurEvent={onBlurEvent}
-            inputValue={inputValue}
+            setInputValue={setInputValue}
+            setErrorInputField={setErrorInputField}
+            inputValue={inputValue.addInput}
           />
 
           <Buttons
@@ -188,29 +168,29 @@ export const TodoApp = () => {
               </div>
             );
           })}
-        {editInputValue.id && (
+        {editInputObj.id && (
           <div className="add-todo-container">
             <Input
               type={"text"}
               className={"edit-input"}
               name={"editInput"}
-              placeholderText={editInputValue.description}
-              onChangeEvent={onChangeEvent}
-              onBlurEvent={onBlurEvent}
-              inputValue={inputValue}
+              placeholderText={editInputObj.description}
+              setInputValue={setInputValue}
+              setErrorInputField={setErrorInputField}
+              inputValue={inputValue.editInput}
             />
 
             <Buttons
               classNameText={"add-button"}
               onClickEvent={onClickEventSave}
               buttonText={"SAVE"}
-              todoid={editInputValue.id}
+              todoid={editInputObj.id}
             />
             <Buttons
               classNameText={"cancel-button"}
               onClickEvent={onClickEventCancel}
               buttonText={"CANCEL"}
-              todoid={editInputValue.id}
+              todoid={editInputObj.id}
             />
           </div>
         )}
