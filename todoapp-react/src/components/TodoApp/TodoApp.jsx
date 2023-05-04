@@ -47,22 +47,23 @@ export const TodoApp = () => {
     event.preventDefault();
 
     const tempTodos = [...todos];
-    // Add data to local storage if input Value is valid
-    if (!errorInputField.addInput.error) {
-      // store todos previous values into tempTodos and push new values to tempTodos
-      tempTodos.push({
-        id: randomIDGenerator(),
-        description: inputValue.addInput,
-        isCompleted: false,
-      });
-      setTodos(tempTodos);
-      setInputValue((prev) => ({
-        ...prev,
-        addInput: "",
-      }));
+
+    if (errorInputField.addInput.error) {
+      return;
     }
 
-    return;
+    // Add data to local storage if input Value is valid
+    // store todos previous values into tempTodos and push new values to tempTodos
+    tempTodos.push({
+      id: randomIDGenerator(),
+      description: inputValue.addInput,
+      isCompleted: false,
+    });
+    setTodos(tempTodos);
+    setInputValue((prev) => ({
+      ...prev,
+      addInput: "",
+    }));
   };
 
   // Handling Button click Event for Deleting existing todo
@@ -87,7 +88,6 @@ export const TodoApp = () => {
     });
 
     setEditInputObj(found);
-    // setInputValue(found.description);
     setInputValue((prev) => ({
       ...prev,
       editInput: found.description,
@@ -105,6 +105,8 @@ export const TodoApp = () => {
   const onClickEventSave = (event) => {
     event.preventDefault();
     const tempTodos = [...todos];
+
+    if (errorInputField.editInput.error) return;
 
     // Add data to local storage if edit input Value is valid
     if (Object.values(editInputObj).length > 0) {

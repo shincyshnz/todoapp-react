@@ -3,38 +3,20 @@ import "./TodoList.css";
 
 export const TodoList = ({ todo, todos, setTodos }) => {
   const { id, description, isCompleted } = todo;
-  const tempTodo = [...todos];
-
-  const [classNameText, setClassNameText] = useState(() => {
-    let text = "list-item";
-    text += isCompleted && " list-completed";
-    return text;
-  });
 
   const toggleIsCompleted = () => {
-    tempTodo.map((todo) => {
-      //Toggle isCompleted
-      if (id === todo.id) todo.isCompleted = !todo.isCompleted;
-
-      return;
-    });
-
-    // Change className to add strike-through text decoration
-    if (todo.isCompleted) {
-      setClassNameText((prev) => (prev += " list-completed"));
-    } else {
-      setClassNameText((prev) => (prev += "list-item"));
-    }
-
-    // update local storage
-    setTodos(tempTodo);
+    const tempTodos = [...todos];
+    const todoIndex = todos.findIndex((t) => t.id === id);
+    const tempTodo = { ...todos[todoIndex], isCompleted: !isCompleted };
+    tempTodos[todoIndex] = tempTodo;
+    setTodos(tempTodos);
   };
 
+  const classNameText = `list-item ${isCompleted ? "list-completed" : ""}`;
+
   return (
-    <>
-      <p className={classNameText} key={id} onClick={toggleIsCompleted}>
-        {description}
-      </p>
-    </>
+    <p className={classNameText} key={id} onClick={toggleIsCompleted}>
+      {description}
+    </p>
   );
 };
