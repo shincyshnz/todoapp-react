@@ -16,14 +16,15 @@ export const TodoList = ({ todo, todos, setTodos }) => {
       //Toggle isCompleted
       if (id === todo.id) todo.isCompleted = !todo.isCompleted;
 
-      // Change className to add strike-through text decoration
-      if (todo.isCompleted) {
-        setClassNameText((prev) => (prev += " list-completed"));
-      } else {
-        setClassNameText((prev) => (prev += "list"));
-      }
       return;
     });
+
+    // Change className to add strike-through text decoration
+    if (todo.isCompleted) {
+      setClassNameText((prev) => (prev += " list-completed"));
+    } else {
+      setClassNameText((prev) => (prev += "list-item"));
+    }
 
     // update local storage
     setTodos(tempTodo);
