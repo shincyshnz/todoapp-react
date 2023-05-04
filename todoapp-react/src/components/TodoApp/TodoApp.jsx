@@ -11,6 +11,8 @@ export const TodoApp = () => {
     editInput: "",
   });
 
+  const [isComplete, setIsComplete] = useState(false);
+
   const [editInputObj, setEditInputObj] = useState({});
 
   const [errorInputField, setErrorInputField] = useState({
@@ -149,7 +151,7 @@ export const TodoApp = () => {
             return (
               <div className="todo-list-container" key={index}>
                 <div className="list-container">
-                  <TodoList todo={todo} />
+                  <TodoList todo={todo} todos={todos} setTodos={setTodos} />
                 </div>
                 <div className="button-container">
                   <Buttons
