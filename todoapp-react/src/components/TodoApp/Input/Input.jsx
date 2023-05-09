@@ -17,8 +17,8 @@ export const Input = forwardRef(
     // Handling onBlur Event for input box
     const onBlurEvent = (event) => {
       const { name, value } = event.target;
+
       let tempErrorObj = {
-        error: value === "" || value.length <= 2,
         errorMessage:
           value === "" || value.length <= 2
             ? "Please enter any todo with more than 3 characters"

@@ -17,11 +17,9 @@ export const TodoApp = () => {
 
   const [errorInputField, setErrorInputField] = useState({
     addInput: {
-      error: false,
       errorMessage: "",
     },
     editInput: {
-      error: false,
       errorMessage: "",
     },
   });
@@ -143,7 +141,7 @@ export const TodoApp = () => {
           />
         </div>
         <div className="error-container">
-          {errorInputField.addInput.error && (
+          {errorInputField.addInput.errorMessage && (
             <label className="error-input">
               {errorInputField.addInput.errorMessage}
             </label>
@@ -201,7 +199,7 @@ export const TodoApp = () => {
           </div>
         )}
         <div className="error-container">
-          {errorInputField.editInput.error && (
+          {errorInputField.editInput.errorMessage && (
             <label className="error-input">
               {errorInputField.editInput.errorMessage}
             </label>
