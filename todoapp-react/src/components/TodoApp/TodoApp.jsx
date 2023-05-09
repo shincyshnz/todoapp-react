@@ -32,7 +32,6 @@ export const TodoApp = () => {
   });
 
   useEffect(() => {
-    inputRef.current?.focus();
     localStorage.setItem("Todo List", JSON.stringify(todos));
   }, [todos]);
 
@@ -94,6 +93,8 @@ export const TodoApp = () => {
       ...prev,
       editInput: found.description,
     }));
+
+    inputRef.current?.focus();
   };
 
   // Handling Button click Event for cancel Edit
