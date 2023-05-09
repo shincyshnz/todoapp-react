@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./TodoApp.css";
 import { Buttons } from "./Buttons/Buttons";
 import { Input } from "./Input/Input";
@@ -11,7 +11,7 @@ export const TodoApp = () => {
     editInput: "",
   });
 
-  const [isComplete, setIsComplete] = useState(false);
+  const inputRef = useRef(null);
 
   const [editInputObj, setEditInputObj] = useState({});
 
@@ -32,6 +32,7 @@ export const TodoApp = () => {
   });
 
   useEffect(() => {
+    inputRef.current?.focus();
     localStorage.setItem("Todo List", JSON.stringify(todos));
   }, [todos]);
 
@@ -59,6 +60,7 @@ export const TodoApp = () => {
       description: inputValue.addInput,
       isCompleted: false,
     });
+
     setTodos(tempTodos);
     setInputValue((prev) => ({
       ...prev,
@@ -132,7 +134,6 @@ export const TodoApp = () => {
             setErrorInputField={setErrorInputField}
             inputValue={inputValue.addInput}
           />
-
           <Buttons
             classNameText={"add-button"}
             onClickEvent={onClickEventAdd}
@@ -182,8 +183,8 @@ export const TodoApp = () => {
               setInputValue={setInputValue}
               setErrorInputField={setErrorInputField}
               inputValue={inputValue.editInput}
+              inputRef={inputRef}
             />
-
             <Buttons
               classNameText={"add-button"}
               onClickEvent={onClickEventSave}
