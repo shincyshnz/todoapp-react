@@ -1,4 +1,11 @@
 #root {
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
+  max-height: min-content;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    #152431 0%,
+    rgba(21, 36, 49, 0) 100%
+  );
+  background-color: rgb(18, 30, 40);
 }
