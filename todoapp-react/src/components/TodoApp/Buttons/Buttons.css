@@ -3,6 +3,7 @@ button {
 }
 
 .add-todo-container .add-button,
+.edit-todo-container .add-button,
 .cancel-button {
   padding: 12px 14px;
   width: 95px;

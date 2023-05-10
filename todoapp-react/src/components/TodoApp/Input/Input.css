@@ -9,12 +9,12 @@
 }
 
 .add-todo-container .add-input:focus,
-.add-todo-container .edit-input:focus {
+.edit-todo-container .edit-input:focus {
   border: solid 1px white;
   outline: none;
 }
 
-.add-todo-container .edit-input {
+.edit-todo-container .edit-input {
   width: 234px;
   height: 40px;
   padding: 12px 15px;

@@ -25,7 +25,8 @@
   margin-inline: 30px;
 }
 
-.todo-inner-container .add-todo-container {
+.todo-inner-container .add-todo-container,
+.todo-inner-container .edit-todo-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -39,6 +40,11 @@
   margin: 10px 10px;
   color: #f96060;
   height: 40px;
+}
+.todo-list-main-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .todo-inner-container .todo-list-container {

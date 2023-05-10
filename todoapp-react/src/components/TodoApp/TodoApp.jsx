@@ -6,15 +6,14 @@ import { TodoList } from "./TodoList/TodoList";
 import { v4 as uuid } from "uuid";
 
 export const TodoApp = () => {
+  const inputRef = useRef({});
+
   const [inputValue, setInputValue] = useState({
     addInput: "",
     editInput: "",
   });
-
-  const inputRef = useRef(null);
-
   const [editInputObj, setEditInputObj] = useState({});
-
+  const [toggleEdit, setToggleEdit] = useState(false);
   const [errorInputField, setErrorInputField] = useState({
     addInput: {
       errorMessage: "",
@@ -23,7 +22,6 @@ export const TodoApp = () => {
       errorMessage: "",
     },
   });
-
   const [todos, setTodos] = useState(() => {
     const storedTodos = JSON.parse(localStorage.getItem("Todo List"));
     return storedTodos || [];
@@ -46,7 +44,7 @@ export const TodoApp = () => {
 
     const tempTodos = [...todos];
 
-    if (errorInputField.addInput.error) {
+    if (errorInputField.addInput.errorMessage) {
       return;
     }
 
@@ -81,7 +79,7 @@ export const TodoApp = () => {
   // Handling Button click Event for Editing existing todo
   const onClickEventEdit = (event, todoId = "") => {
     event.preventDefault();
-
+    setToggleEdit((prev) => (prev = !prev));
     const found = todos.find((todo) => {
       return todo.id === todoId;
     });
@@ -92,7 +90,19 @@ export const TodoApp = () => {
       editInput: found.description,
     }));
 
-    inputRef.current?.focus();
+    // const childElements = event.target.closest(
+    //   ".todo-inner-container"
+    // ).children;
+    // const [editContainerElement] = Array.from(childElements).filter((child) => {
+    //   return child.className === "edit-todo-container";
+    // });
+    // const [editInput] = editContainerElement.childNodes;
+    // editInput.focus();
+
+    const [editInputActive] = Object.values(inputRef.current).filter(
+      (val) => val !== null
+    );
+    editInputActive.focus();
   };
 
   // Handling Button click Event for cancel Edit
@@ -107,7 +117,7 @@ export const TodoApp = () => {
     event.preventDefault();
     const tempTodos = [...todos];
 
-    if (errorInputField.editInput.error) return;
+    if (errorInputField.editInput.errorMessage) return;
 
     // Add data to local storage if edit input Value is valid
     if (Object.values(editInputObj).length > 0) {
@@ -117,6 +127,43 @@ export const TodoApp = () => {
     }
     setTodos(tempTodos);
     setEditInputObj({});
+    setToggleEdit((prev) => (prev = !prev));
+  };
+
+  const renderTodoList = (todo, index) => {
+    return (
+      <div className="todo-list-container" key={index}>
+        <div className="list-container">
+          <TodoList todo={todo} todos={todos} setTodos={setTodos} />
+        </div>
+        <div className="button-container">
+          <Buttons
+            classNameText={"edit-button"}
+            onClickEvent={onClickEventEdit}
+            buttonText={""}
+            todoid={todo.id}
+          />
+          <Buttons
+            classNameText={"delete-button"}
+            onClickEvent={onClickEventDelete}
+            buttonText={""}
+            todoid={todo.id}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  const renderError = () => {
+    return (
+      <div className="error-container">
+        {errorInputField.editInput.errorMessage && (
+          <label className="error-input">
+            {errorInputField.editInput.errorMessage}
+          </label>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -140,40 +187,13 @@ export const TodoApp = () => {
             todoid={""}
           />
         </div>
-        <div className="error-container">
-          {errorInputField.addInput.errorMessage && (
-            <label className="error-input">
-              {errorInputField.addInput.errorMessage}
-            </label>
-          )}
-        </div>
+        {renderError()}
         {todos.length > 0 &&
           todos.map((todo, index) => {
-            const { id } = todo;
-            return (
-              <div className="todo-list-container" key={index}>
-                <div className="list-container">
-                  <TodoList todo={todo} todos={todos} setTodos={setTodos} />
-                </div>
-                <div className="button-container">
-                  <Buttons
-                    classNameText={"edit-button"}
-                    onClickEvent={onClickEventEdit}
-                    buttonText={""}
-                    todoid={id}
-                  />
-                  <Buttons
-                    classNameText={"delete-button"}
-                    onClickEvent={onClickEventDelete}
-                    buttonText={""}
-                    todoid={id}
-                  />
-                </div>
-              </div>
-            );
+            return renderTodoList(todo, index);
           })}
         {editInputObj.id && (
-          <div className="add-todo-container">
+          <div className="edit-todo-container">
             <Input
               type={"text"}
               className={"edit-input"}
@@ -182,7 +202,9 @@ export const TodoApp = () => {
               setInputValue={setInputValue}
               setErrorInputField={setErrorInputField}
               inputValue={inputValue.editInput}
-              inputRef={inputRef}
+              inputRef={(element) =>
+                (inputRef.current[editInputObj.id] = element)
+              }
             />
             <Buttons
               classNameText={"add-button"}
@@ -198,13 +220,8 @@ export const TodoApp = () => {
             />
           </div>
         )}
-        <div className="error-container">
-          {errorInputField.editInput.errorMessage && (
-            <label className="error-input">
-              {errorInputField.editInput.errorMessage}
-            </label>
-          )}
-        </div>
+
+        {renderError()}
       </div>
     </div>
   );
