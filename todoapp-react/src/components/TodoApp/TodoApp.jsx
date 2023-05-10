@@ -90,19 +90,7 @@ export const TodoApp = () => {
       editInput: found.description,
     }));
 
-    // const childElements = event.target.closest(
-    //   ".todo-inner-container"
-    // ).children;
-    // const [editContainerElement] = Array.from(childElements).filter((child) => {
-    //   return child.className === "edit-todo-container";
-    // });
-    // const [editInput] = editContainerElement.childNodes;
-    // editInput.focus();
-
-    const [editInputActive] = Object.values(inputRef.current).filter(
-      (val) => val !== null
-    );
-    editInputActive.focus();
+    inputRef.current[todoId].focus();
   };
 
   // Handling Button click Event for cancel Edit
@@ -199,9 +187,9 @@ export const TodoApp = () => {
               className={"edit-input"}
               name={"editInput"}
               placeholderText={editInputObj.description}
+              inputValue={inputValue.editInput}
               setInputValue={setInputValue}
               setErrorInputField={setErrorInputField}
-              inputValue={inputValue.editInput}
               inputRef={(element) =>
                 (inputRef.current[editInputObj.id] = element)
               }
