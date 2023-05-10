@@ -97,7 +97,6 @@ export const TodoApp = () => {
     }));
 
     setEditInputObj((prev) => (prev = found));
-    console.log(editInputObj);
 
     // inputRef.current[todoId]?.focus();
     // const childNodes = inputRef.current.childNodes;
