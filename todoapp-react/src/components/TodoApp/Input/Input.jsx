@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import "./Input.css";
 
 export const Input = ({
@@ -9,7 +9,7 @@ export const Input = ({
   inputValue,
   setInputValue,
   setErrorInputField,
-  inputRef,
+  // inputRef,
 }) => {
   // Handling onBlur Event for input box
   const onBlurEvent = (event) => {
@@ -47,7 +47,7 @@ export const Input = ({
       placeholder={placeholderText}
       onChange={onChangeEvent}
       onBlur={onBlurEvent}
-      ref={inputRef}
+      // ref={inputRef}
     />
   );
 };

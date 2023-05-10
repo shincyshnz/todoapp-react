@@ -6,14 +6,13 @@ import { TodoList } from "./TodoList/TodoList";
 import { v4 as uuid } from "uuid";
 
 export const TodoApp = () => {
-  const inputRef = useRef({});
+  const inputRef = useRef(null);
 
   const [inputValue, setInputValue] = useState({
     addInput: "",
     editInput: "",
   });
   const [editInputObj, setEditInputObj] = useState({});
-  const [toggleEdit, setToggleEdit] = useState(false);
   const [errorInputField, setErrorInputField] = useState({
     addInput: {
       errorMessage: "",
@@ -29,7 +28,13 @@ export const TodoApp = () => {
 
   useEffect(() => {
     localStorage.setItem("Todo List", JSON.stringify(todos));
-  }, [todos]);
+    if (!editInputObj.id) return;
+    const childNodes = inputRef.current.childNodes;
+    const [editActive] = Object.values(childNodes).filter(
+      (child) => child.className === "edit-todo-container"
+    );
+    editActive.firstChild?.focus();
+  }, [todos, editInputObj]);
 
   // Random ID generator for todos item
   const randomIDGenerator = () => {
@@ -79,18 +84,28 @@ export const TodoApp = () => {
   // Handling Button click Event for Editing existing todo
   const onClickEventEdit = (event, todoId = "") => {
     event.preventDefault();
-    setToggleEdit((prev) => (prev = !prev));
+
+    // setToggleEdit((prev) => (prev = !prev));
+
     const found = todos.find((todo) => {
       return todo.id === todoId;
     });
 
-    setEditInputObj(found);
     setInputValue((prev) => ({
       ...prev,
       editInput: found.description,
     }));
 
-    inputRef.current[todoId].focus();
+    setEditInputObj((prev) => (prev = found));
+    console.log(editInputObj);
+
+    // inputRef.current[todoId]?.focus();
+    // const childNodes = inputRef.current.childNodes;
+    // const [editActive] = Object.values(childNodes).filter(
+    //   (child) => child.className === "edit-todo-container"
+    // );
+    // editActive.firstChild.focus();
+    // console.log(editActive.firstChild);
   };
 
   // Handling Button click Event for cancel Edit
@@ -115,7 +130,6 @@ export const TodoApp = () => {
     }
     setTodos(tempTodos);
     setEditInputObj({});
-    setToggleEdit((prev) => (prev = !prev));
   };
 
   const renderTodoList = (todo, index) => {
@@ -156,7 +170,7 @@ export const TodoApp = () => {
 
   return (
     <div className="todo-container">
-      <div className="todo-inner-container">
+      <div className="todo-inner-container" ref={inputRef}>
         <h1>Todo List</h1>
         <div className="add-todo-container">
           <Input
@@ -190,9 +204,6 @@ export const TodoApp = () => {
               inputValue={inputValue.editInput}
               setInputValue={setInputValue}
               setErrorInputField={setErrorInputField}
-              inputRef={(element) =>
-                (inputRef.current[editInputObj.id] = element)
-              }
             />
             <Buttons
               classNameText={"add-button"}
