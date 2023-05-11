@@ -30,10 +30,17 @@ export const TodoApp = () => {
     localStorage.setItem("Todo List", JSON.stringify(todos));
     if (!editInputObj.id) return;
     const childNodes = inputRef.current.childNodes;
-    const [editActive] = Object.values(childNodes).filter(
-      (child) => child.className === "edit-todo-container"
-    );
-    editActive.firstChild?.focus();
+
+    // const [editActive] = Object.values(childNodes).filter(
+    //   (child) => child.className === "edit-todo-container"
+    // );
+    // editActive.firstChild?.focus();
+
+    childNodes.forEach((child) => {
+      if (child.className === "edit-todo-container") {
+        child.firstChild.focus();
+      }
+    });
   }, [todos, editInputObj]);
 
   // Random ID generator for todos item
